@@ -442,7 +442,12 @@ class ClassProxy extends AbstractProxy
             $this->addFieldInterceptorsCode($ctor);
         }
 
-        $prefix = implode(' ', Reflection::getModifierNames($this->class->getModifiers()));
+        $modifiers = Reflection::getModifierNames($this->class->getModifiers());
+        $index = array_search('static', $modifiers);
+        if ($index !== false) {
+          unset($modifiers[$index]);
+        }
+        $prefix = implode(' ', $modifiers);
 
         $classCode = (
             $this->class->getDocComment() . "\n" . // Original doc-block
